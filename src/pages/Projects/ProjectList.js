@@ -3,9 +3,6 @@ import ProjectForm from "./ProjectForm";
 import {
   Paper,
   makeStyles,
-  TableBody,
-  TableRow,
-  TableCell,
   Toolbar,
   Dialog,
   DialogTitle,
@@ -14,18 +11,12 @@ import {
   Box,
   Grid,
   Container,
-  InputLabel,
-  MenuItem,
-  Chip,
-  InputAdornment,
 } from "@material-ui/core";
-import useTable from "../../components/useTable";
 import Stack from "@mui/material/Stack";
 import * as employeeService from "../../services/employeeService";
 import Controls from "../../components/controls/Controls";
 // import { Search } from "@material-ui/icons";
 import AddIcon from "@material-ui/icons/Add";
-import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import CloseIcon from "@material-ui/icons/Close";
 import Notification from "../../components/Notification";
 import ConfirmDialog from "../../components/ConfirmDialog";
@@ -38,7 +29,6 @@ import {
 } from "../../store/constant/projectConstants";
 import ProjectFormstep2 from "./ProjectFormstep2";
 import ProjectCard from "./components/ProjectCard";
-import { Search } from "@material-ui/icons";
 import FilterListSharpIcon from "@mui/icons-material/FilterListSharp";
 import CustomSelect from "../../components/CustomSelect";
 import { ProjectRecords } from "../../data/ProjectCardRecords";
@@ -266,7 +256,7 @@ const ProjectList = React.forwardRef((props, ref) => {
                     }}
                   />
                   <Controls.Button
-                    text="Add Projects"
+                    text="Add Project"
                     className={classes.Button}
                     variant="contained"
                     startIcon={<AddIcon />}

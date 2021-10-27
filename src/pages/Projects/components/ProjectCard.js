@@ -3,27 +3,36 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import {
-  Button,
-  CardActionArea,
-  Select,
-  MenuItem,
-  Chip,
-} from "@material-ui/core/";
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
 import {
-  Avatar,
   ClickAwayListener,
   Grow,
   MenuList,
   Popper,
+  Button,
+  CardActionArea,
+  Select,
+  MenuItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Chip,
 } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 import Divider from "@material-ui/core/Divider";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import Fab from "@material-ui/core/Fab";
-
 import { makeStyles } from "@material-ui/core";
+
+import Controls from "../../../components/controls/Controls";
+import ProjectForm from "../ProjectForm";
+import { addSecondForm } from "../../../store/actions/ProjectActions";
+import ProjectFormstep2 from "../ProjectFormstep2";
+import { useDispatch } from "react-redux";
+import Notification from "../../../components/Notification";
+import ConfirmDialog from "../../../components/ConfirmDialog";
+
 const useStyles = makeStyles((theme) => ({
   pname: { color: theme.palette.primary.main, fontWeight: "bold" },
   pdesc: { lineHeight: "12px" },
@@ -72,9 +81,25 @@ const useStyles = makeStyles((theme) => ({
   menuItemtxt: { fontSize: "12px" },
   menuItemtxtdel: { fontSize: "12px", color: "red" },
 }));
-export default function ProjectCard(props, setOpenPopup, setRecordForEdit) {
-  const [show, setShow] = useState(false);
+export default function ProjectCard(props) {
+  const dispatch = useDispatch();
   const classes = useStyles();
+
+  const [recordForEdit, setRecordForEdit] = useState(null);
+  const [openPopup, setOpenPopup] = useState(false);
+  const [openPopup2, setOpenPopup2] = useState(false);
+  const [show, setShow] = useState(false);
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: "",
+    type: "",
+  });
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    title: "",
+    subTitle: "",
+  });
+
   const showdetails = () => {
     setShow(true);
   };
@@ -85,6 +110,23 @@ export default function ProjectCard(props, setOpenPopup, setRecordForEdit) {
 
   const handleChange = (event) => {
     setAge(event.target.value);
+  };
+
+  const addOrEdit = (firstValues, resetForm) => {
+    // if (firstValues.id === 0)
+    console.log("addOr edit", firstValues);
+    dispatch(addSecondForm(firstValues));
+    // else
+    // employeeService.updateEmployee(firstValues);
+    resetForm();
+    setRecordForEdit(null);
+    setOpenPopup2(false);
+    setNotify({
+      isOpen: true,
+      message: "Submitted Successfully",
+      type: "success",
+    });
+    // getAllProjectsAction();
   };
 
   //   menu Start
@@ -166,7 +208,7 @@ export default function ProjectCard(props, setOpenPopup, setRecordForEdit) {
             </MenuItem>
             <MenuItem value={3}>
               {" "}
-              <Chip label="Archieved" className={classes.violet} size="small" />
+              <Chip label="Archived" className={classes.violet} size="small" />
             </MenuItem>
             <MenuItem value={4}>
               {" "}
@@ -231,7 +273,7 @@ export default function ProjectCard(props, setOpenPopup, setRecordForEdit) {
                           onClick={handleClose}
                           className={classes.menuItemtxt}
                         >
-                          Archieve
+                          Archive
                         </MenuItem>
                         <Divider />
                         <MenuItem
@@ -331,6 +373,76 @@ export default function ProjectCard(props, setOpenPopup, setRecordForEdit) {
           </CardContent>
         </CardActionArea>
       </Card>
+      {/* Form 1 */}
+      <Dialog
+        open={openPopup}
+        maxWidth="md"
+        classes={{ paper: classes.dialogWrapper }}
+      >
+        <DialogTitle className={classes.dialogTitle}>
+          <div style={{ display: "flex" }}>
+            <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
+              New Project
+            </Typography>
+            <Controls.ActionButton
+              color="secondary"
+              onClick={() => {
+                setOpenPopup(false);
+              }}
+            >
+              <CloseIcon />
+            </Controls.ActionButton>
+          </div>
+        </DialogTitle>
+        <DialogContent dividers>
+          <ProjectForm
+            recordForEdit={recordForEdit}
+            openPopup={openPopup}
+            setOpenPopup={setOpenPopup}
+            openPopup2={openPopup2}
+            setOpenPopup2={setOpenPopup2}
+          />
+        </DialogContent>
+      </Dialog>
+      {/* Form 2 */}
+      <Dialog
+        open={openPopup2}
+        maxWidth="md"
+        classes={{ paper: classes.dialogWrapper }}
+      >
+        <DialogTitle className={classes.dialogTitle}>
+          <div style={{ display: "flex" }}>
+            <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
+              Create Project
+            </Typography>
+
+            <Controls.ActionButton
+              color="secondary"
+              onClick={() => {
+                setOpenPopup2(false);
+              }}
+            >
+              <CloseIcon />
+            </Controls.ActionButton>
+          </div>
+        </DialogTitle>
+        <DialogContent dividers>
+          {/* {children} */}
+          <ProjectFormstep2
+            // openPopup={openPopup}
+            // setOpenPopup={setOpenPopup}
+            openPopup2={openPopup2}
+            setOpenPopup2={setOpenPopup2}
+            recordForEdit={recordForEdit}
+            addOrEdit={addOrEdit}
+          />
+        </DialogContent>
+      </Dialog>
+      <Notification notify={notify} setNotify={setNotify} />
+      <ConfirmDialog
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
     </div>
   );
 }
