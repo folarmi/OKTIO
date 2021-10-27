@@ -129,18 +129,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const headCells = [
-//   { id: "image", label: "Image" },
-//   { id: "project_name", label: "Project Name & Description" },
-//   { id: "start", label: "Start Date" },
-//   { id: "location", label: "Location" },
-//   { id: "project_manager", label: "Project Manager" },
-//   { id: "project_owner", label: "Project Owner" },
-//   { id: "actions", label: "Status", disableSorting: true },
-//   { id: "action", label: "Actions", disableSorting: true },
-// ];
-
 const ProjectList = React.forwardRef((props, ref) => {
+  console.log(props);
   const classes = useStyles();
   // const AllProjects = useSelector((state) => state.projects);
   // const { loading, projects } = AllProjects;
