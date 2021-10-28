@@ -41,9 +41,17 @@ export default function ProjectReducer(
       };
 
     case ADD_SECOND_FORM:
+      // const lists = [...state.projects];
+      // const currentProject = lists.find(
+      //   (item) => item.id === actions.payload.data.id
+      // );
+      // const index = lists.findIndexOf(currentProject);
+      // let tempItem = lists[index];
+      // tempItem = action.payload.data;
+
       return {
         ...state,
-         
+        // projects: lists,
         projectsFirstForm: actions.payload,
       };
 

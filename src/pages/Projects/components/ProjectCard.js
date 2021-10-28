@@ -24,14 +24,15 @@ import Divider from "@material-ui/core/Divider";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import Fab from "@material-ui/core/Fab";
 import { makeStyles } from "@material-ui/core";
+import moment from "moment";
 
 import Controls from "../../../components/controls/Controls";
-import ProjectForm from "../ProjectForm";
-import { addSecondForm } from "../../../store/actions/ProjectActions";
-import ProjectFormstep2 from "../ProjectFormstep2";
+import { onEditSubmit } from "../../../store/actions/ProjectActions";
 import { useDispatch } from "react-redux";
 import Notification from "../../../components/Notification";
 import ConfirmDialog from "../../../components/ConfirmDialog";
+import EditProjectForm from "../EditProjectForm";
+import EditProjectFormStepTwo from "../EditProjectFormStepTwo";
 
 const useStyles = makeStyles((theme) => ({
   pname: { color: theme.palette.primary.main, fontWeight: "bold" },
@@ -49,7 +50,12 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "none",
     color: theme.palette.primary.main,
   },
-  sdate: { fontSize: "9px", opacity: "0.5" },
+  sdate: {
+    fontSize: "9px",
+    // opacity: "0.5",
+    color: "#A19B9D",
+    fontWeight: "500",
+  },
   date: { fontSize: "10px", fontWeight: "bold" },
   actionbtn: {
     position: "absolute",
@@ -112,14 +118,13 @@ export default function ProjectCard(props) {
     setAge(event.target.value);
   };
 
-  const addOrEdit = (firstValues, resetForm) => {
+  const onFormEdit = (firstValues) => {
     // if (firstValues.id === 0)
     console.log("addOr edit", firstValues);
-    dispatch(addSecondForm(firstValues));
+    dispatch(onEditSubmit(firstValues));
     // else
     // employeeService.updateEmployee(firstValues);
-    resetForm();
-    setRecordForEdit(null);
+    // setRecordForEdit(null);
     setOpenPopup2(false);
     setNotify({
       isOpen: true,
@@ -163,6 +168,8 @@ export default function ProjectCard(props) {
   }, [openmenu]);
 
   // menu End
+
+  console.log("project details", props.project);
   return (
     <div>
       {" "}
@@ -254,10 +261,9 @@ export default function ProjectCard(props) {
                         onKeyDown={handleListKeyDown}
                       >
                         <MenuItem
-                          // onClick={handleClose}
                           onClick={() => {
                             setOpenPopup(true);
-                            setRecordForEdit(null);
+                            setRecordForEdit(props.project);
                           }}
                           className={classes.menuItemtxt}
                         >
@@ -324,13 +330,13 @@ export default function ProjectCard(props) {
                 <Box sx={{ p: 0, order: 2, flexGrow: 1 }}>
                   <Typography className={classes.sdate}>Start Date</Typography>
                   <Typography className={classes.date}>
-                    {props.project.startDate}
+                    {moment(props.project.startDate).format("MMM Do YY")}
                   </Typography>
                 </Box>
                 <Box sx={{ p: 0, order: 3 }}>
                   <Typography className={classes.sdate}>End Date</Typography>
                   <Typography className={classes.date}>
-                    {props.project.endDate}
+                    {moment(props.project.endDate).format("MMM Do YY")}
                   </Typography>
                 </Box>
               </Box>
@@ -395,7 +401,7 @@ export default function ProjectCard(props) {
           </div>
         </DialogTitle>
         <DialogContent dividers>
-          <ProjectForm
+          <EditProjectForm
             recordForEdit={recordForEdit}
             openPopup={openPopup}
             setOpenPopup={setOpenPopup}
@@ -428,13 +434,13 @@ export default function ProjectCard(props) {
         </DialogTitle>
         <DialogContent dividers>
           {/* {children} */}
-          <ProjectFormstep2
+          <EditProjectFormStepTwo
             // openPopup={openPopup}
             // setOpenPopup={setOpenPopup}
             openPopup2={openPopup2}
             setOpenPopup2={setOpenPopup2}
             recordForEdit={recordForEdit}
-            addOrEdit={addOrEdit}
+            onFormEdit={onFormEdit}
           />
         </DialogContent>
       </Dialog>

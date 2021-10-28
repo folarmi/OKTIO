@@ -34,8 +34,7 @@ export const getAllProjectsAction = () => async (dispatch, getState) => {
   });
 };
 
-export const addFirstForm = (values)=> (dispatch) => {
-  
+export const addFirstForm = (values) => (dispatch) => {
   dispatch({
     type: PROJECTS_ADD_REQUEST,
   });
@@ -43,35 +42,65 @@ export const addFirstForm = (values)=> (dispatch) => {
     type: ADD_FIRST_FORM,
     payload: values,
   });
-
 };
 
-export const addSecondForm = (values)=> (dispatch, getState) => {
+export const addSecondForm = (values) => (dispatch, getState) => {
   const {
     projects: { projectsFirstForm },
     auth: { auth },
   } = getState();
-   
+
   const projectFormsValues = Object.assign(projectsFirstForm, values);
   projectFormsValues.userId = auth.user._id;
   projectFormsValues.unit = "unit";
   // projectFormsValues.image = image;
-  
 
-    axiosInstance
+  axiosInstance
     .post(`api/buyer/addProject`, projectFormsValues)
     .then((response) => {
       if (response.data.responseCode === "00") {
-      //  let addedProjects = response.data;
+        //  let addedProjects = response.data;
         dispatch({
-           type: ADD_SECOND_FORM,
-           payload: projectFormsValues,
+          type: ADD_SECOND_FORM,
+          payload: projectFormsValues,
         });
       }
-    })
-    // .catch((err) => {
-    //   dispatch({ type: GET_PROJECTS_FAIL });
-    // });
+    });
+  // .catch((err) => {
+  //   dispatch({ type: GET_PROJECTS_FAIL });
+  // });
+
+  //  dispatch({
+  //   type: ADD_SECOND_FORM,
+  //   payload: projectFormsValues,
+  // });
+};
+
+export const onEditSubmit = (values) => (dispatch, getState) => {
+  const {
+    projects: { projectsFirstForm },
+    auth: { auth },
+  } = getState();
+
+  const projectFormsValues = Object.assign(projectsFirstForm, values);
+  projectFormsValues.userId = auth.user._id;
+  projectFormsValues.unit = "unit";
+  // projectFormsValues.image = image;
+
+  axiosInstance
+    .patch(`/api/buyer/EditsaveProjectDraft/${values.id}`, projectFormsValues)
+    .then((response) => {
+      if (response.data.responseCode === "00") {
+        //  let addedProjects = response.data;
+        dispatch({
+          type: ADD_SECOND_FORM,
+          payload: projectFormsValues,
+        });
+      }
+    });
+  // .catch((err) => {
+  //   dispatch({ type: GET_PROJECTS_FAIL });
+  // });
 
   //  dispatch({
   //   type: ADD_SECOND_FORM,
