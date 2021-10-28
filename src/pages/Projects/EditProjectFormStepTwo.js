@@ -139,11 +139,9 @@ const EditProjectFormStepTwo = (props) => {
         type: "success",
       });
     }
-    console.log("submitEdit", values);
   };
 
-  console.log("props", props);
-  const maxSize = 1024 * 1;
+  const maxSize = 1024;
 
   const validateImageSize = (file) => {
     if (file) {
@@ -157,8 +155,6 @@ const EditProjectFormStepTwo = (props) => {
       setImgError("");
     }
   };
-
-  console.log("imgPreview", imgPreview);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -210,8 +206,6 @@ const EditProjectFormStepTwo = (props) => {
       }));
     setImgPreview(recordForEdit.image);
   }, [recordForEdit]);
-
-  console.log("record", values);
 
   return (
     <>
@@ -380,7 +374,7 @@ const EditProjectFormStepTwo = (props) => {
             <Controls.Button
               disableElevation
               type="submit"
-              text="Create Project"
+              text="Update Project"
               className={classes.Button}
             />
           </Box>{" "}

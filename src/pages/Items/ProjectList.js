@@ -103,6 +103,11 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: "transparent",
   },
+  wrapper: {
+    borderRadius: "12px",
+    padding: "0 12px",
+    backgroundColor: "red",
+  },
   pageHeader: {
     padding: theme.spacing(1),
     display: "flex",
@@ -203,10 +208,12 @@ const ProjectList = React.forwardRef((props, ref) => {
   }));
 
   const dispatch = useDispatch();
+  const { editData } = props;
+  console.log("editData", editData);
 
   const getAllProjectsAction = () => {
     axiosInstance
-      .get(`api/buyer/${props.auth.user._id}`)
+      .get(`api/buyer/${props.auth.company_name}`)
       .then((response) => {
         if (response.data.responseCode === "00") {
           let allProjects = response.data.project;
@@ -323,7 +330,7 @@ const ProjectList = React.forwardRef((props, ref) => {
 
   return (
     <>
-      <Paper elevation={0} square className={classes.root}>
+      <Paper elevation={0} square className={classes.wrapper}>
         <div className={classes.pageHeader}>
           <div style={{ width: "100%" }}>
             <Box sx={{ display: "flex", p: 0 }}>
@@ -496,6 +503,7 @@ const ProjectList = React.forwardRef((props, ref) => {
 const mapStateToProps = (state) => {
   return {
     auth: state.auth.auth,
+    editData: state.projects.editData,
   };
 };
 export default connect(mapStateToProps)(ProjectList);

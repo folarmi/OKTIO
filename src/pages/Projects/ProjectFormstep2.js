@@ -131,6 +131,14 @@ const ProjectFormstep2 = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
+      if (imgError) {
+        setNotify({
+          isOpen: true,
+          message: "Could not capture image",
+          type: "error",
+        });
+        return;
+      }
       values.image = img ? img : " ";
       addOrEdit(values, resetForm);
       setNotify({
@@ -139,25 +147,41 @@ const ProjectFormstep2 = (props) => {
         type: "success",
       });
     }
-    console.log(values);
   };
 
-  const maxSize = 1024 * 1;
+  const maxSize = 50;
 
   const validateImageSize = (file) => {
     if (file) {
-      const fsize = file.size / maxSize;
+      const fsize = file.size / 1024;
       if (fsize > maxSize) {
-        setImgError(
-          `Maximum file size exceed, This file size is: ${fsize} kb. Please check the tips for the required size, height and width`
-        );
+        setImgError(`File too large, ${maxSize}, ${fsize}`);
         return;
       }
       setImgError("");
     }
   };
 
-  console.log(imgError);
+  const saveAsDraft = (e) => {
+    e.preventDefault();
+    if (validate()) {
+      if (imgError) {
+        setNotify({
+          isOpen: true,
+          message: "Could not capture image",
+          type: "error",
+        });
+        return;
+      }
+      values.image = img ? img : " ";
+      addOrEdit(values, resetForm);
+      setNotify({
+        isOpen: true,
+        message: "Submitted Successfully",
+        type: "success",
+      });
+    }
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -229,21 +253,6 @@ const ProjectFormstep2 = (props) => {
             <Grid container spacing={3}>
               <Grid item xs>
                 <div className="container">
-                  {error && (
-                    <p
-                      className="errMsg"
-                      style={{
-                        color: "red",
-                        fontSize: "11px",
-                        margin: "3px 0",
-                        paddingLeft: "10px",
-                      }}
-                    >
-                      {" "}
-                      File Not Supported{" "}
-                    </p>
-                  )}
-
                   <div
                     className="imgPreview"
                     style={{
@@ -285,6 +294,19 @@ const ProjectFormstep2 = (props) => {
                           onChange={handleImageChange}
                           value={values.image}
                         />
+                        {imgError && (
+                          <p
+                            className="errMsg"
+                            style={{
+                              color: "red",
+                              fontSize: "11px",
+                              margin: "3px 0",
+                              paddingLeft: "10px",
+                            }}
+                          >
+                            {imgError}
+                          </p>
+                        )}
                         {/* <span>( jpg, jpeg or png)</span> */}
                       </>
                     )}

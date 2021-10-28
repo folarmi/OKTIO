@@ -62,3 +62,9 @@
 }
 
 /* Select Styles */
+
+.project-card-container {
+  background-color: white;
+  border-radius: 12px;
+  padding: 0 12px 15rem 12px;
+}

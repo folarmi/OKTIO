@@ -120,7 +120,7 @@ export default function ProjectCard(props) {
 
   const onFormEdit = (firstValues) => {
     // if (firstValues.id === 0)
-    console.log("addOr edit", firstValues);
+
     dispatch(onEditSubmit(firstValues));
     // else
     // employeeService.updateEmployee(firstValues);
@@ -169,7 +169,7 @@ export default function ProjectCard(props) {
 
   // menu End
 
-  console.log("project details", props.project);
+  // console.log("project details", props.project);
   return (
     <div>
       {" "}

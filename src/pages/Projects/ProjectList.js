@@ -156,15 +156,17 @@ const ProjectList = React.forwardRef((props, ref) => {
   }));
 
   const dispatch = useDispatch();
+  const { editData } = props;
+  console.log("editData", editData);
 
   const getAllProjectsAction = () => {
     axiosInstance
-      .get(`api/buyer/${props.auth.user._id}`)
+      .get(`api/buyer/${props.auth.user.company_name}`)
       .then((response) => {
         if (response.data.responseCode === "00") {
           let allProjects = response.data.project;
           setRecords(allProjects);
-          console.log("AllProjects", allProjects);
+          console.log("AllProjects", props.auth);
 
           dispatch({
             type: CONFIRMED_GET_PROJECTS,
@@ -178,7 +180,7 @@ const ProjectList = React.forwardRef((props, ref) => {
   };
   useEffect(() => {
     getAllProjectsAction();
-  }, [dispatch]);
+  }, [dispatch, editData]);
 
   // const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
   //   useTable(records, headCells, filterFn);
@@ -300,8 +302,8 @@ const ProjectList = React.forwardRef((props, ref) => {
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              <Paper
+            <div className="project-card-container">
+              <div
                 className={(classes.pageContent, classes.toolbars)}
                 style={{ padding: "12px" }}
                 elevation={0}
@@ -320,8 +322,8 @@ const ProjectList = React.forwardRef((props, ref) => {
                     </Grid>
                   ))}
                 </Grid>
-              </Paper>
-            </Paper>
+              </div>
+            </div>
           </Grid>
         </Grid>
       </Container>
@@ -417,6 +419,7 @@ const ProjectList = React.forwardRef((props, ref) => {
 const mapStateToProps = (state) => {
   return {
     auth: state.auth.auth,
+    editData: state.projects.editData,
   };
 };
 export default connect(mapStateToProps)(ProjectList);

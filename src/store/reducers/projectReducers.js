@@ -5,10 +5,12 @@ import {
   GET_PROJECTS_FAIL,
   GET_PROJECTS_REQUEST,
   PROJECTS_ADD_REQUEST,
+  EDIT_PROJECT_FORM,
 } from "../constant/projectConstants";
 
 const initialState = {
   projects: [],
+  editData: null,
 };
 
 export default function ProjectReducer(
@@ -41,18 +43,15 @@ export default function ProjectReducer(
       };
 
     case ADD_SECOND_FORM:
-      // const lists = [...state.projects];
-      // const currentProject = lists.find(
-      //   (item) => item.id === actions.payload.data.id
-      // );
-      // const index = lists.findIndexOf(currentProject);
-      // let tempItem = lists[index];
-      // tempItem = action.payload.data;
-
       return {
         ...state,
-        // projects: lists,
         projectsFirstForm: actions.payload,
+      };
+
+    case EDIT_PROJECT_FORM:
+      return {
+        ...state,
+        editData: actions.payload,
       };
 
     default:

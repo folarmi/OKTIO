@@ -20,8 +20,8 @@ const initialFValues = {
   project_name: "",
   description: "",
   location: "",
-  startDate: "",
-  endDate: "",
+  startDate: new Date(),
+  endDate: new Date(),
 };
 
 const useStyles = makeStyles((theme) => ({

@@ -73,7 +73,6 @@ export default function EditProjectForm(props) {
       return Object.values(temp).every((x) => x === "");
   };
 
-  console.log("Project id", props);
   const { values, setValues, errors, setErrors, handleInputChange, resetForm } =
     useForm(initialFValues, true, validate);
 
@@ -95,7 +94,7 @@ export default function EditProjectForm(props) {
         ...recordForEdit,
       });
   }, [recordForEdit]);
-  console.log("Edit project form", values);
+
   return (
     <>
       <Form onSubmit={handleSubmit}>
