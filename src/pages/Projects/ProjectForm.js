@@ -18,14 +18,10 @@ import { addFirstForm } from "../../store/actions/ProjectActions";
 
 const initialFValues = {
   project_name: "",
-  // email: "",
   description: "",
-  // city: "",
-  // gender: "male",
   location: "",
-  startDate: new Date(),
-  endDate: new Date(),
-  // isPermanent: false,
+  startDate: "",
+  endDate: "",
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -36,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
   Button: {
     padding: ".4rem 2rem",
-    borderRadius: "6px",
+    borderRadius: "10px",
     fontWeight: "700",
     fontSize: "14px",
   },
@@ -45,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
 export default function EmployeeForm(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
+
   const {
     recordForEdit,
     // openPopup,
@@ -59,22 +56,15 @@ export default function EmployeeForm(props) {
     if ("project_name" in fieldValues)
       temp.project_name = fieldValues.project_name
         ? ""
-        : "This field is required.";
+        : "Project Name is required.";
 
     if ("description" in fieldValues)
       temp.description = fieldValues.description
         ? ""
-        : "This field is required.";
-    // if ("email" in fieldValues)
-    //   temp.email = /$^|.+@.+..+/.test(fieldValues.email)
-    //     ? ""
-    //     : "Email is not valid.";
-    // if ("mobile" in fieldValues)
-    //   temp.mobile =
-    //     fieldValues.mobile.length > 9 ? "" : "Minimum 10 numbers required.";
+        : "Description is required.";
     if ("location" in fieldValues)
       temp.location =
-        fieldValues.location.length !== 0 ? "" : "This field is required.";
+        fieldValues.location.length !== 0 ? "" : "Location is required.";
     setErrors({
       ...temp,
     });
@@ -134,6 +124,7 @@ export default function EmployeeForm(props) {
               label="Start Date"
               value={values.startDate}
               onChange={handleInputChange}
+              format="DD-MM-YYYY"
             />
           </Grid>
 
@@ -143,17 +134,25 @@ export default function EmployeeForm(props) {
               label="End Date"
               value={values.endDate}
               onChange={handleInputChange}
+              format="DD-MM-YYYY"
             />
           </Grid>
           <Grid item xs={6} p={1}>
-            <Controls.Select
+            <Controls.Input
+              name="location"
+              label="Location"
+              value={values.location}
+              onChange={handleInputChange}
+              error={errors.location}
+            />
+            {/* <Controls.Select
               name="location"
               label="Locations"
               value={values.location}
               onChange={handleInputChange}
               options={employeeService.getDepartmentCollection()}
               error={errors.location}
-            />
+            /> */}
           </Grid>
         </Grid>
         <Box display="flex" p={1} bgcolor="background.paper">

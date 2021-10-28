@@ -10,11 +10,6 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import { connect, useDispatch } from "react-redux";
 import { addSecondForm } from "../../store/actions/ProjectActions";
 import Notification from "../../components/Notification";
-// const genderItems = [
-//   { id: "male", title: "Male" },
-//   { id: "female", title: "Female" },
-//   { id: "other", title: "Other" },
-// ];
 
 const initialFValues = {
   business_unit: "",
@@ -64,6 +59,12 @@ const useStyles = makeStyles((theme) => ({
       width: "90%",
     },
   },
+  Button: {
+    padding: ".4rem 2rem",
+    borderRadius: "10px",
+    fontWeight: "700",
+    fontSize: "14px",
+  },
 }));
 
 const ProjectFormstep2 = (props) => {
@@ -81,6 +82,7 @@ const ProjectFormstep2 = (props) => {
   const [imgPreview, setImgPreview] = useState(null);
   const [img, setImg] = useState("");
   const [error, setError] = useState();
+  const [imgError, setImgError] = useState("");
   const [notify, setNotify] = useState({
     isOpen: false,
     message: "",
@@ -92,29 +94,29 @@ const ProjectFormstep2 = (props) => {
     if ("business_unit" in fieldValues)
       temp.business_unit = fieldValues.business_unit
         ? ""
-        : "This field is required.";
+        : "Business Unit is required.";
 
     if ("department" in fieldValues)
-      temp.department = fieldValues.department ? "" : "This field is required.";
+      temp.department = fieldValues.department ? "" : "Department is required.";
 
     if ("project_reference_number" in fieldValues)
       temp.project_reference_number = fieldValues.project_reference_number
         ? ""
-        : "This field is required.";
+        : "Project Reference Number is required.";
 
     if ("project_manager" in fieldValues)
       temp.project_manager = fieldValues.project_manager
         ? ""
-        : "This field is required.";
+        : "Project Manager is required.";
 
     if ("currency" in fieldValues)
       temp.currency =
-        fieldValues.currency.length !== 0 ? "" : "This field is required.";
+        fieldValues.currency.length !== 0 ? "" : "Currency is required.";
     if ("project_status" in fieldValues)
       temp.project_status =
         fieldValues.project_status.length !== 0
           ? ""
-          : "This field is required.";
+          : "Project Status is required.";
     setErrors({
       ...temp,
     });
@@ -137,6 +139,7 @@ const ProjectFormstep2 = (props) => {
         type: "success",
       });
     }
+    console.log(values);
   };
   //   const toBase64 = file => new Promise((resolve, reject) => {
   //     const reader = new FileReader();
@@ -145,22 +148,76 @@ const ProjectFormstep2 = (props) => {
   //     reader.onerror = error => reject(error);
   // });
 
-  async function handleImageChange(e) {
-    const selected = e.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(selected);
+  // async function handleImageChange(e) {
+  //   const selected = e.target.files[0];
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(selected);
 
-    const ALLOWED_TYPES = ["image/png", "image/jpg", "image/jpeg"];
-    if (selected && ALLOWED_TYPES.includes(selected.type)) {
-      reader.onload = (e) => {
-        setImgPreview(reader.result);
-        setImg(e.target.result);
-      };
-      setError(false);
-    } else {
-      setError(true);
+  //   const ALLOWED_TYPES = ["image/png", "image/jpg", "image/jpeg"];
+  //   if (selected && ALLOWED_TYPES.includes(selected.type)) {
+  //     reader.onload = (e) => {
+  //       setImgPreview(reader.result);
+  //       setImg(e.target.result);
+  //     };
+  //     setError(false);
+  //   } else {
+  //     setError(true);
+  //   }
+  // }
+
+  const maxSize = 1024 * 1;
+
+  const validateImageSize = (file) => {
+    if (file) {
+      const fsize = file.size / maxSize;
+      if (fsize > maxSize) {
+        setImgError(
+          `Maximum file size exceed, This file size is: ${fsize} kb. Please check the tips for the required size, height and width`
+        );
+        return;
+      }
+      setImgError("");
     }
-  }
+  };
+
+  console.log(imgError);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.substring(0, 5) === "image") {
+      // validateImageSize(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64String = reader.result;
+        // set the state to the base64string
+        setImgPreview(base64String);
+        setImg(base64String);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      // make a decision
+    }
+  };
+
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file && file.type.substring(0, 5) === "image") {
+  //     setImg(file);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (img) {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       const base64String = reader.result;
+  //       setImgPreview(base64String);
+  //     };
+  //     reader.readAsDataURL(img);
+  //   } else {
+  //     setImgPreview("");
+  //   }
+  // }, [img]);
 
   useEffect(() => {
     // if (recordForEdit !== null)
@@ -176,11 +233,12 @@ const ProjectFormstep2 = (props) => {
 
         <Grid container>
           <Grid item xs={6} className={classes.formPart1}>
-            <Controls.Input
+            <Controls.Select
               name="business_unit"
-              label="Business Unit"
+              label="Select Business Unit"
               value={values.business_unit}
               onChange={handleInputChange}
+              options={employeeService.getDepartmentCollection()}
               error={errors.business_unit}
             />
             <Controls.Input
@@ -278,7 +336,7 @@ const ProjectFormstep2 = (props) => {
 
           <Grid item xs={6} p={1}>
             <Controls.Input
-              label="Project Reference Number"
+              label="Internal Project Reference ID"
               name="project_reference_number"
               value={values.project_reference_number}
               onChange={handleInputChange}
@@ -321,17 +379,34 @@ const ProjectFormstep2 = (props) => {
         </Grid>
         <Box display="flex" p={1} bgcolor="background.paper">
           <Box p={0} flexGrow={1}>
-            <Controls.Button text="Cancel" color="default" />
-          </Box>
-          <Box p={0}>
             <Controls.Button
-              text="Save as Draftss"
+              disableElevation
+              text="Back"
               color="default"
-              onClick={resetForm}
+              className={classes.Button}
+              style={{
+                backgroundColor: "#E2F2FF",
+                color: "#2170FF",
+                padding: ".4rem 4rem",
+              }}
             />
           </Box>
           <Box p={0}>
-            <Controls.Button type="submit" text="Next" />
+            <Controls.Button
+              disableElevation
+              text="Save as draft"
+              color="default"
+              onClick={resetForm}
+              className={classes.Button}
+            />
+          </Box>
+          <Box p={0}>
+            <Controls.Button
+              disableElevation
+              type="submit"
+              text="Create Project"
+              className={classes.Button}
+            />
           </Box>{" "}
           <Box p={0}></Box>
         </Box>

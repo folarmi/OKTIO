@@ -17,6 +17,7 @@ import * as employeeService from "../../services/employeeService";
 import Controls from "../../components/controls/Controls";
 // import { Search } from "@material-ui/icons";
 import AddIcon from "@material-ui/icons/Add";
+import CancelIcon from "@mui/icons-material/Cancel";
 import CloseIcon from "@material-ui/icons/Close";
 import Notification from "../../components/Notification";
 import ConfirmDialog from "../../components/ConfirmDialog";
@@ -120,7 +121,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProjectList = React.forwardRef((props, ref) => {
-  console.log(props);
   const classes = useStyles();
   // const AllProjects = useSelector((state) => state.projects);
   // const { loading, projects } = AllProjects;
@@ -334,7 +334,11 @@ const ProjectList = React.forwardRef((props, ref) => {
       >
         <DialogTitle className={classes.dialogTitle}>
           <div style={{ display: "flex" }}>
-            <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
+            <Typography
+              variant="h6"
+              component="div"
+              style={{ flexGrow: 1, fontWeight: "600", fontSize: "16px" }}
+            >
               New Project
             </Typography>
             <Controls.ActionButton
@@ -343,7 +347,14 @@ const ProjectList = React.forwardRef((props, ref) => {
                 setOpenPopup(false);
               }}
             >
-              <CloseIcon />
+              <CancelIcon
+                style={{
+                  color: "#424143",
+                  backgroundColor: "white",
+                  border: "0px",
+                  outline: "none",
+                }}
+              />
             </Controls.ActionButton>
           </div>
         </DialogTitle>
