@@ -141,29 +141,6 @@ const ProjectFormstep2 = (props) => {
     }
     console.log(values);
   };
-  //   const toBase64 = file => new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(setImgPreview(reader.result));
-  //     reader.onerror = error => reject(error);
-  // });
-
-  // async function handleImageChange(e) {
-  //   const selected = e.target.files[0];
-  //   const reader = new FileReader();
-  //   reader.readAsDataURL(selected);
-
-  //   const ALLOWED_TYPES = ["image/png", "image/jpg", "image/jpeg"];
-  //   if (selected && ALLOWED_TYPES.includes(selected.type)) {
-  //     reader.onload = (e) => {
-  //       setImgPreview(reader.result);
-  //       setImg(e.target.result);
-  //     };
-  //     setError(false);
-  //   } else {
-  //     setError(true);
-  //   }
-  // }
 
   const maxSize = 1024 * 1;
 
@@ -185,7 +162,7 @@ const ProjectFormstep2 = (props) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.substring(0, 5) === "image") {
-      // validateImageSize(file);
+      validateImageSize(file);
       const reader = new FileReader();
       reader.onload = () => {
         const base64String = reader.result;
