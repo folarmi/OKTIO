@@ -166,7 +166,6 @@ const ProjectList = React.forwardRef((props, ref) => {
         if (response.data.responseCode === "00") {
           let allProjects = response.data.project;
           setRecords(allProjects);
-          console.log("AllProjects", props.auth);
 
           dispatch({
             type: CONFIRMED_GET_PROJECTS,
